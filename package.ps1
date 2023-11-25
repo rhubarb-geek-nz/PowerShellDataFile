@@ -2,7 +2,7 @@
 # Copyright (c) 2023 Roger Brown.
 # Licensed under the MIT License.
 
-param($OutDir)
+param($IntermediateOutputPath,$OutDir,$PublishDir)
 
 $ModuleName = 'PowerShellDataFile'
 $CompanyName = 'rhubarb-geek-nz'
@@ -31,18 +31,8 @@ $Author = Get-SingleNodeValue $xmlDoc '/Project/PropertyGroup/Authors'
 $Copyright = Get-SingleNodeValue $xmlDoc '/Project/PropertyGroup/Copyright'
 $AssemblyName = Get-SingleNodeValue $xmlDoc '/Project/PropertyGroup/AssemblyName'
 
-$ModulePath = ( $OutDir + $ModuleId )
-
-$null = New-Item -ItemType Directory -Path $ModulePath
-
-Get-ChildItem -LiteralPath $OutDir -Filter '*.dll' | ForEach-Object {
-	$_ | Copy-Item -Destination $ModulePath
-}
-
-Copy-Item -LiteralPath 'README.md' -Destination $ModulePath
-
 $moduleSettings = @{
-	Path = "$ModuleId.psd1"
+	Path = "$IntermediateOutputPath$ModuleId.psd1"
 	RootModule = "$AssemblyName.dll"
 	ModuleVersion = $Version
 	Guid = '73363885-3c20-4b43-bdaa-027b4e6217ea'
@@ -59,6 +49,4 @@ $moduleSettings = @{
 
 New-ModuleManifest @moduleSettings
 
-Import-PowerShellDataFile -LiteralPath "$ModuleId.psd1" | Export-PowerShellDataFile | Set-Content -LiteralPath "$ModulePath$DSC$ModuleId.psd1"
-
-Remove-Item -LiteralPath "$ModuleId.psd1"
+Import-PowerShellDataFile -LiteralPath "$IntermediateOutputPath$ModuleId.psd1" | Export-PowerShellDataFile | Set-Content -LiteralPath "$PublishDir$DSC$ModuleId.psd1"

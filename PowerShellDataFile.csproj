@@ -25,6 +25,7 @@
     <None Include="README.md">
       <Pack>True</Pack>
       <PackagePath>\</PackagePath>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
 
@@ -35,7 +36,9 @@
   </ItemGroup>
 
   <Target Name="Package" AfterTargets="Publish" Condition=" '$(Configuration)' == 'Release' ">
-    <Exec Command="pwsh ./package.ps1 $(OutDir)" />
+    <Exec Command="pwsh ./package.ps1 $(IntermediateOutputPath) $(OutDir) $(PublishDir)" />
+    <Delete Files="$(PublishDir)$(AssemblyName).deps.json" />
+    <Delete Files="$(PublishDir)$(AssemblyName).pdb" />
   </Target>
 
 </Project>
