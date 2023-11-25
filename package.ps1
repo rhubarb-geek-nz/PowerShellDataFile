@@ -9,7 +9,6 @@ $CompanyName = 'rhubarb-geek-nz'
 
 $ErrorActionPreference = 'Stop'
 $ProgressPreference = 'SilentlyContinue'
-$DSC = [System.IO.Path]::DirectorySeparatorChar
 
 function Get-SingleNodeValue([System.Xml.XmlDocument]$doc,[string]$path)
 {
@@ -49,4 +48,4 @@ $moduleSettings = @{
 
 New-ModuleManifest @moduleSettings
 
-Import-PowerShellDataFile -LiteralPath "$IntermediateOutputPath$ModuleId.psd1" | Export-PowerShellDataFile | Set-Content -LiteralPath "$PublishDir$DSC$ModuleId.psd1"
+Import-PowerShellDataFile -LiteralPath "$IntermediateOutputPath$ModuleId.psd1" | Export-PowerShellDataFile | Set-Content -LiteralPath "$PublishDir$ModuleId.psd1"
