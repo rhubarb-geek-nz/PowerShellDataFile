@@ -36,7 +36,8 @@
   </ItemGroup>
 
   <Target Name="Package" AfterTargets="Publish" Condition=" '$(Configuration)' == 'Release' ">
-    <Exec Command="pwsh ./package.ps1 $(IntermediateOutputPath) $(OutDir) $(PublishDir)" />
+    <Exec Command="dotnet tool restore" />
+    <Exec Command="dotnet pwsh -ExecutionPolicy Bypass -File ./package.ps1 $(IntermediateOutputPath) $(OutDir) $(PublishDir)" />
     <Delete Files="$(PublishDir)$(AssemblyName).deps.json" />
     <Delete Files="$(PublishDir)$(AssemblyName).pdb" />
   </Target>

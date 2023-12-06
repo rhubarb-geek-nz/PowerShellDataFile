@@ -30,6 +30,12 @@ $Author = Get-SingleNodeValue $xmlDoc '/Project/PropertyGroup/Authors'
 $Copyright = Get-SingleNodeValue $xmlDoc '/Project/PropertyGroup/Copyright'
 $AssemblyName = Get-SingleNodeValue $xmlDoc '/Project/PropertyGroup/AssemblyName'
 
+$FilePath = ( Get-Item "$OutDir$AssemblyName.dll" | Select-Object PSPath -ExpandProperty PSPath ).Split('::')[1]
+
+$Assembly = [System.Reflection.Assembly]::LoadFile($FilePath)
+
+Import-Module -Assembly $Assembly
+
 $moduleSettings = @{
 	Path = "$IntermediateOutputPath$ModuleId.psd1"
 	RootModule = "$AssemblyName.dll"
